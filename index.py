@@ -16,7 +16,4 @@ def get_sunrise():
     print str(city.latitude) + ', ' + str(city.longitude)
     # return city.name
     sun = city.sun(date=datetime.datetime.now().date(), local=True)
-    return jsonify({
-        'sunset': sun['sunset'],
-        'sunrise': sun['sunrise']
-    })
+    return jsonify(sun)
