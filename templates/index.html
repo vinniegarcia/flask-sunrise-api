@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Sunriser 3.0 Flask edition</title>
+        <style>
+            body {
+                background: #006;
+                color: #ddd;
+                font-family: 'Avenir Next', Ubuntu, Helvetica, sans-serif;
+                font-size: 18px;
+                line-height: 1.5;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="main">
+            <form method="get" action="/sunrise" id="city-form">
+                <label for="city">Enter your city:</label>
+                <input type="text" name="city" id="city" placeholder="San Francisco">
+                <button type="submit">Submit</button>
+            </form>
+            <ul id="results">
+
+            </ul>
+            <p><em>* All times are local to the specified city</em></p>
+        </div>
+        <script>
+            const setList = (props) => {
+                const results = document.getElementById('results');
+                results.innerHTML = '';
+                for (let prop in props) {
+                    results.innerHTML += `<li>${prop}: ${props[prop].replace('GMT', '')}</li>`;
+                }
+            };
+
+            const submitCity = async (e) => {
+                e.preventDefault();
+                const cityName = document.getElementById('city').value;
+                if (cityName === '') return;
+                const url = `/sunrise?city=${cityName}`
+                try {
+                    const response = await fetch(url, {
+                        method: 'GET'
+                    });
+                    const json = await response.json();
+                    setList(json)
+                } catch (e) {
+                    console.error('oops!', e);
+                }
+            };
+
+            document.getElementById('city-form').addEventListener('submit', submitCity);
+        </script>
+    </body>
+</html>
